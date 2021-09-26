@@ -11,4 +11,6 @@ public class UserInput {
     private String currency;
     private String dateFrom;
     private String dateTo;
+    private double currencyValue;
+    private double currencyRate;
 }

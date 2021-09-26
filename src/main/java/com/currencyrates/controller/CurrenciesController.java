@@ -24,6 +24,7 @@ public class CurrenciesController {
 
     @GetMapping("/")
     public String index(Model model){
+        model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "index";
     }
 
@@ -37,7 +38,7 @@ public class CurrenciesController {
     @PostMapping("/currencyRates")
     public String currencyHistoryInput(Model model, @ModelAttribute UserInput userInput) {
         log.info("Form submitted with data: " + userInput);
-        userService.setUserInput(userInput);
+        userService.initForCurrencyHistory(userInput);
         return "redirect:currencyRates";
     }
 
@@ -46,5 +47,21 @@ public class CurrenciesController {
         model.addAttribute("userInput", userService.getUserInput());
         model.addAttribute("currencyRates", currencyService.getCurrencyRateHistory());
         return "currencyRates";
+    }
+
+    @GetMapping("currencyCalculator")
+    public String currencyCalculator(Model model){
+        model.addAttribute("userInput", new UserInput());
+        model.addAttribute("result", userService.calculateCurrency());
+        model.addAttribute("userInputInformation", userService.getUserInput());
+        model.addAttribute("currencyList", currencyService.getCurrencyList());
+        return "currencyCalculator";
+    }
+
+    @PostMapping("currencyCalculator")
+    public String currencyCalculatorInput(Model model, @ModelAttribute UserInput userInput){
+        log.info("Form submitted with data: " + userInput);
+        userService.initForCalculator(userInput, currencyService.getLatestCurrencyRate(userInput.getCurrency()));
+        return "redirect:currencyCalculator";
     }
 }

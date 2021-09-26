@@ -1,5 +1,6 @@
 package com.currencyrates.service;
 
+import com.currencyrates.dto.CcyAmt;
 import com.currencyrates.dto.CcyNtry;
 import com.currencyrates.dto.FxRate;
 import com.currencyrates.repository.CcyAmtRepository;
@@ -26,7 +27,6 @@ public class CurrencyService {
     private final CcyAmtRepository ccyAmtRepository;
 
 
-
     public List<CcyNtry> getCurrencyList() {
         return ccyNtryRepository.findAll();
     }
@@ -50,8 +50,19 @@ public class CurrencyService {
         return fxRates;
     }
 
-    public double getLatestCurrencyRate(String currency){
+    public double getLatestCurrencyRate(String currency) {
         return ccyAmtRepository.findByCcy(currency).getAmt();
+    }
+
+    public List<CcyAmt> getLatestCurrenciesRate() {
+        List<CcyAmt> currencyList = ccyAmtRepository.findAll();
+        List<CcyAmt> currencyListWithoutEur = new ArrayList<>();
+        for (int i = 0; i < currencyList.size(); i++) {
+            if (i % 2 != 0) {
+                currencyListWithoutEur.add(currencyList.get(i));
+            }
+        }
+        return currencyListWithoutEur;
     }
 
 }

@@ -39,27 +39,40 @@
 </nav>
 <header class="bg-primary bg-gradient text-white">
     <div class="container px-4 text-center">
-        <h1 class="fw-bolder">Welcome to currency application</h1>
+        <h1 class="fw-bolder">Currency calculator</h1>
     </div>
 </header>
 <section id="options">
     <div class="container px-4">
         <div class="row gx-4 justify-content-center">
             <div class="col-lg-8">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">Currency</th>
-                        <th scope="col">Rate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="currency: ${currencyList}">
-                        <td th:text="${currency.getCcy()}"></td>
-                        <td th:text="${currency.getAmt()}"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <form action="#" th:action="@{/currencyCalculator}" th:object="${userInput}" method="post">
+                    <div class="form-row">
+                        <div class="row">
+                            <label for="currencyList">Currency</label>
+                            <div class="col-sm-6">
+                                <select class="form-select" id="currencyList" aria-label="Default select example"
+                                        name="currencyList" th:field="*{currency}">
+                                    <option th:each="currency: ${currencyList}" th:value="${currency.getCcy()}"
+                                            th:text="${currency.getCcy()} + ' - ' + ${currency.getCcyNm()}"></option>
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" id="currencyValue" placeholder="Eur"
+                                       name="currencyValue" th:field="*{currencyValue}">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">Calculate</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h4 th:text="${result} + ' Eur'"></h4>
+                        </div>
+                        <div class="row">
+                            <h4 th:text="'Currency rate ' + ${userInputInformation.getCurrencyRate()}"></h4>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
