@@ -5,6 +5,7 @@ import com.currencyrates.dto.CcyNtry;
 import com.currencyrates.dto.FxRate;
 import com.currencyrates.repository.CcyAmtRepository;
 import com.currencyrates.repository.CcyNtryRepository;
+import com.currencyrates.repository.FxRateRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -25,7 +26,8 @@ public class CurrencyService {
     private final UserService userService;
     @Autowired
     private final CcyAmtRepository ccyAmtRepository;
-
+    @Autowired
+    private final FxRateRepository fxRateRepository;
 
     public List<CcyNtry> getCurrencyList() {
         return ccyNtryRepository.findAll();
@@ -40,7 +42,7 @@ public class CurrencyService {
             ObjectMapper mapper = new XmlMapper();
             URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=LT&ccy=" +
                     currency + "&dtFrom=" + dataFrom + "&dtTo=" + dataTo);
-            TypeReference<List<FxRate>> typeReference = new TypeReference<List<FxRate>>() {
+            TypeReference<List<FxRate>> typeReference = new TypeReference<>() {
             };
             fxRates = mapper.readValue(url, typeReference);
             return fxRates;
@@ -65,4 +67,29 @@ public class CurrencyService {
         return currencyListWithoutEur;
     }
 
+    public void addCurrencyList(){
+        try {
+            ObjectMapper mapper = new XmlMapper();
+            URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrencyList");
+            TypeReference<List<CcyNtry>> typeReference = new TypeReference<>() {
+            };
+            List<CcyNtry> ccyNtries = mapper.readValue(url, typeReference);
+            ccyNtryRepository.saveAll(ccyNtries);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addLatestCurrencyRates(){
+        try {
+            ObjectMapper mapper = new XmlMapper();
+            URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=LT");
+            TypeReference<List<FxRate>> typeReference = new TypeReference<>() {
+            };
+            List<FxRate> fxRates = mapper.readValue(url, typeReference);
+            fxRateRepository.saveAll(fxRates);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
