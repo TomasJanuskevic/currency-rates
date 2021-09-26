@@ -35,7 +35,6 @@ public class CurrencyConfig {
             try {
                 ObjectMapper mapper = new XmlMapper();
                 URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=LT");
-                // URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getFxRatesForCurrency?tp=LT&ccy=USD&dtFrom=2021-09-20&dtTo=2021-09-25");
                 TypeReference<List<FxRate>> typeReference = new TypeReference<List<FxRate>>(){};
                 List<FxRate> fxRates = mapper.readValue(url, typeReference);
                 fxRateRepository.saveAll(fxRates);

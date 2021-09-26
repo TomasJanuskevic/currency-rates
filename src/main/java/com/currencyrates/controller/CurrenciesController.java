@@ -23,14 +23,19 @@ public class CurrenciesController {
 
 
     @GetMapping("/")
-    public String index(Model model) {
-        model.addAttribute("userInput", new UserInput());
-        model.addAttribute("currencyList", currencyService.getCurrencyList());
+    public String index(Model model){
         return "index";
     }
 
-    @PostMapping("/select")
-    public String postSelectForm(Model model, @ModelAttribute UserInput userInput) {
+    @GetMapping("/currencyHistory")
+    public String currencyHistory(Model model) {
+        model.addAttribute("userInput", new UserInput());
+        model.addAttribute("currencyList", currencyService.getCurrencyList());
+        return "currencyHistory";
+    }
+
+    @PostMapping("/currencyRates")
+    public String currencyHistoryInput(Model model, @ModelAttribute UserInput userInput) {
         log.info("Form submitted with data: " + userInput);
         userService.setUserInput(userInput);
         return "redirect:currencyRates";
@@ -39,6 +44,7 @@ public class CurrenciesController {
     @GetMapping("/currencyRates")
     public String currencyRates(Model model){
         model.addAttribute("userInput", userService.getUserInput());
+        model.addAttribute("currencyRates", currencyService.getCurrencyRateHistory());
         return "currencyRates";
     }
 }

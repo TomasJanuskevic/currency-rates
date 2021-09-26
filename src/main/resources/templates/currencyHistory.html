@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Currency Rates</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico"/>
+    <link href="css/styles.css" rel="stylesheet"/>
+</head>
+<body id="page-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+    <div class="container px-4">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="navbar-brand" th:href="@{/currencyHistory}">Currency history</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand" th:href="@{/currencyCalculator}">Currency calculator</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<header class="bg-primary bg-gradient text-white">
+    <div class="container px-4 text-center">
+        <h1 class="fw-bolder">Choose currency and date</h1>
+    </div>
+</header>
+<section id="options">
+    <div class="container px-4">
+        <div class="row gx-4 justify-content-center">
+            <div class="col-lg-8">
+                <form action="#" th:action="@{/currencyRates}" th:object="${userInput}" method="post">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateFrom">Date from: </label>
+                            <input class="form-control" name="dateFrom" id="dateFrom" placeholder="yyyy-mm-dd"
+                                   th:field="*{dateFrom}"
+                                   type="text"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateTo">Date to: </label>
+                            <input class="form-control" name="dateTo" id="dateTo" placeholder="yyyy-mm-dd"
+                                   th:field="*{dateTo}"
+                                   type="text"/>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <h4>Currency:</h4>
+                                <th:block th:each="currency : ${currencyList}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="categoryRadioOptions"
+                                               th:id="'currency_' + ${currency.getCcy()}"
+                                               th:value="${currency.getCcy()}" th:field="*{currency}">
+                                        <label class="form-check-label" th:for="'difficulty_' + ${currency.getCcy()}"
+                                               th:text="${currency.getCcy()} + ' - ' + ${currency.getCcyNm()}" >
+                                        </label>
+                                    </div>
+                                </th:block>
+                            </div>
+                        </div>
+                        <div class="mt-2 form-row">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Enter</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Footer-->
+<footer class="py-5 bg-dark">
+    <div class="container px-4"><p class="m-0 text-center text-white">Copyright &copy; Tomas Januskevic 2021</p></div>
+</footer>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="js/scripts.js"></script>
+</body>
+</html>

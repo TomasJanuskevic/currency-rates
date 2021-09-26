@@ -12,58 +12,48 @@
 <body id="page-top">
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
     <div class="container px-4">
-        <a class="navbar-brand" th:href="@{/}">Currency Rates</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="navbar-brand" th:href="@{/currencyHistory}">Currency history</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand" th:href="@{/currencyCalculator}">Currency calculator</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span></button>
+            </li>
+        </ul>
     </div>
 </nav>
 
 <header class="bg-primary bg-gradient text-white">
     <div class="container px-4 text-center">
-        <h1 class="fw-bolder">Choose currency and date</h1>
+        <h1 class="fw-bolder" th:text="Currency + ' ' + ${userInput.getCurrency()} + ', '
+        + from + ' ' + ${userInput.getDateFrom()} + ' ' + to + ' ' + ${userInput.getDateTo()}"></h1>
     </div>
 </header>
 <section id="options">
     <div class="container px-4">
         <div class="row gx-4 justify-content-center">
             <div class="col-lg-8">
-                <form action="#" th:action="@{/select}" th:object="${userInput}" method="post">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dateFrom">Date from: </label>
-                            <input class="form-control" name="dateFrom" id="dateFrom" placeholder="yyyy-mm-dd"
-                                   th:field="*{dateFrom}"
-                                   type="text"/>
-                        </div>
-                        <div class="form-group">
-                            <label for="dateTo">Date to: </label>
-                            <input class="form-control" name="dateTo" id="dateTo" placeholder="yyyy-mm-dd"
-                                   th:field="*{dateTo}"
-                                   type="text"/>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <h4>Currency:</h4>
-                                <th:block th:each="currency : ${currencyList}">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="categoryRadioOptions"
-                                               th:id="'currency_' + ${currency.getCcy()}"
-                                               th:value="${currency.getCcy()}" th:field="*{currency}">
-                                        <label class="form-check-label" th:for="'difficulty_' + ${currency.getCcy()}"
-                                               th:text="${currency.getCcy()} + ' - ' + ${currency.getCcyNm()}" >
-                                        </label>
-                                    </div>
-                                </th:block>
-                            </div>
-                        </div>
-                        <div class="mt-2 form-row">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Enter</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Rate</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="rate: ${currencyRates}">
+                        <td th:text="${rate.getDt()}"></td>
+                        <td th:text="${rate.getCcyAmt().get(1).getAmt()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
