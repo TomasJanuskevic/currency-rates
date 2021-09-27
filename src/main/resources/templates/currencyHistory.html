@@ -67,10 +67,10 @@
                                 <th:block th:each="currency : ${currencyList}">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="categoryRadioOptions"
-                                               th:id="'currency_' + ${currency.getCcy()}"
-                                               th:value="${currency.getCcy()}" th:field="*{currency}">
-                                        <label class="form-check-label" th:for="'difficulty_' + ${currency.getCcy()}"
-                                               th:text="${currency.getCcy()} + ' - ' + ${currency.getCcyNm()}">
+                                               th:id="'currency_' + ${currency.getCurrencyCode()}"
+                                               th:value="${currency.getCurrencyCode()}" th:field="*{currency}">
+                                        <label class="form-check-label" th:for="'difficulty_' + ${currency.getCurrencyCode()}"
+                                               th:text="${currency.getCurrencyCode()} + ' - ' + ${currency.getCurrencyName()}">
                                         </label>
                                     </div>
                                 </th:block>

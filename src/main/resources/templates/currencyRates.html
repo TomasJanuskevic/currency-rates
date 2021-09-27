@@ -39,8 +39,8 @@
 </nav>
 <header class="bg-primary bg-gradient text-white">
     <div class="container px-4 text-center">
-        <h1 class="fw-bolder" th:text="Currency + ' ' + ${userInput.getCurrency()} + ', '
-        + from + ' ' + ${userInput.getDateFrom()} + ' ' + to + ' ' + ${userInput.getDateTo()}"></h1>
+        <h1 class="fw-bolder" th:text="'Currency: '  + ${userInput.getCurrency()}"></h1>
+        <h1 class="fw-bolder" th:text="'Date: '  + ${userInput.getDateFrom()} + ' - ' + ${userInput.dateTo}"></h1>
     </div>
 </header>
 <section id="options">
@@ -57,7 +57,7 @@
                     <tbody>
                     <tr th:each="rate: ${currencyRates}">
                         <td th:text="${rate.getDt()}"></td>
-                        <td th:text="${rate.getCcyAmt().get(1).getAmt()}"></td>
+                        <td th:text="${rate.getCurrencyRate().get(1).getRate()}"></td>
                     </tr>
                     </tbody>
                 </table>

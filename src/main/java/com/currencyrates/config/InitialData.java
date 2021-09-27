@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 
 @Configuration
-public class CurrencyConfig {
+public class InitialData {
     @Bean
     CommandLineRunner commandLineRunner(CurrencyService currencyService) {
 

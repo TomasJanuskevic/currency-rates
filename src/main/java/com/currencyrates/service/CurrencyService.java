@@ -1,10 +1,10 @@
 package com.currencyrates.service;
 
-import com.currencyrates.dto.CcyAmt;
-import com.currencyrates.dto.CcyNtry;
+import com.currencyrates.dto.currencyRate;
+import com.currencyrates.dto.Currency;
 import com.currencyrates.dto.FxRate;
-import com.currencyrates.repository.CcyAmtRepository;
-import com.currencyrates.repository.CcyNtryRepository;
+import com.currencyrates.repository.CurrencyRateRepository;
+import com.currencyrates.repository.CurrencyRepository;
 import com.currencyrates.repository.FxRateRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,21 +16,22 @@ import org.springframework.stereotype.Service;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class CurrencyService {
     @Autowired
-    private final CcyNtryRepository ccyNtryRepository;
+    private final CurrencyRepository currencyRepository;
     @Autowired
     private final UserService userService;
     @Autowired
-    private final CcyAmtRepository ccyAmtRepository;
+    private final CurrencyRateRepository currencyRateRepository;
     @Autowired
     private final FxRateRepository fxRateRepository;
 
-    public List<CcyNtry> getCurrencyList() {
-        return ccyNtryRepository.findAll();
+    public List<Currency> getCurrencyList() {
+        return currencyRepository.findAll();
     }
 
     public List<FxRate> getCurrencyRateHistory() {
@@ -53,34 +54,38 @@ public class CurrencyService {
     }
 
     public double getLatestCurrencyRate(String currency) {
-        return ccyAmtRepository.findByCcy(currency).getAmt();
+        return currencyRateRepository.findByCurrencyCode(currency).getRate();
     }
 
-    public List<CcyAmt> getLatestCurrenciesRate() {
-        List<CcyAmt> currencyList = ccyAmtRepository.findAll();
-        List<CcyAmt> currencyListWithoutEur = new ArrayList<>();
-        for (int i = 0; i < currencyList.size(); i++) {
-            if (i % 2 != 0) {
-                currencyListWithoutEur.add(currencyList.get(i));
-            }
-        }
-        return currencyListWithoutEur;
+    public List<currencyRate> getLatestCurrenciesRate() {
+        List<Currency> currencyList = getCurrencyList();
+        List<currencyRate> currencyRatesList = currencyRateRepository.findAll();
+        List<currencyRate> filteredListWithFullNames = currencyRatesList.stream()
+                .filter(c -> !c.getCurrencyCode().equals("EUR")).collect(Collectors.toList());
+
+        filteredListWithFullNames.forEach(c -> c.setCurrencyName(
+                currencyList.stream()
+                        .filter(l -> l.getCurrencyCode().equals(c.getCurrencyCode()))
+                        .map(Currency::getCurrencyName)
+                        .findAny().orElse("")));
+
+        return filteredListWithFullNames;
     }
 
-    public void addCurrencyList(){
+    public void addCurrencyList() {
         try {
             ObjectMapper mapper = new XmlMapper();
             URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrencyList");
-            TypeReference<List<CcyNtry>> typeReference = new TypeReference<>() {
+            TypeReference<List<Currency>> typeReference = new TypeReference<>() {
             };
-            List<CcyNtry> ccyNtries = mapper.readValue(url, typeReference);
-            ccyNtryRepository.saveAll(ccyNtries);
+            List<Currency> ccyNtries = mapper.readValue(url, typeReference);
+            currencyRepository.saveAll(ccyNtries);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void addLatestCurrencyRates(){
+    public void addLatestCurrencyRates() {
         try {
             ObjectMapper mapper = new XmlMapper();
             URL url = new URL("http://www.lb.lt/webservices/FxRates/FxRates.asmx/getCurrentFxRates?tp=LT");

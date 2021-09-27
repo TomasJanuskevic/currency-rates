@@ -29,5 +29,5 @@ public class FxRate {
     @JacksonXmlElementWrapper(useWrapping = false)
     @JsonManagedReference(value = "ccyAmt")
     @OneToMany(mappedBy = "fxRate", cascade = CascadeType.ALL)
-    private List<CcyAmt> ccyAmt;
+    private List<currencyRate> currencyRate;
 }

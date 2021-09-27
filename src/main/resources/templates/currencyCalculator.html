@@ -53,8 +53,8 @@
                             <div class="col-sm-6">
                                 <select class="form-select" id="currencyList" aria-label="Default select example"
                                         name="currencyList" th:field="*{currency}">
-                                    <option th:each="currency: ${currencyList}" th:value="${currency.getCcy()}"
-                                            th:text="${currency.getCcy()} + ' - ' + ${currency.getCcyNm()}"></option>
+                                    <option th:each="currency: ${currencyList}" th:value="${currency.getCurrencyCode()}"
+                                            th:text="${currency.getCurrencyCode()} + ' - ' + ${currency.getCurrencyName()}"></option>
                                 </select>
                             </div>
                             <div class="col-sm-3">

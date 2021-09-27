@@ -2,6 +2,7 @@ package com.currencyrates.controller;
 
 
 import com.currencyrates.dto.UserInput;
+import com.currencyrates.service.CalculatorService;
 import com.currencyrates.service.CurrencyService;
 import com.currencyrates.service.UserService;
 import lombok.extern.java.Log;
@@ -20,10 +21,12 @@ public class CurrenciesController {
     private CurrencyService currencyService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private CalculatorService calculatorService;
 
 
     @GetMapping("/")
-    public String index(Model model){
+    public String index(Model model) {
         model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "index";
     }
@@ -31,7 +34,7 @@ public class CurrenciesController {
     @GetMapping("/currencyHistory")
     public String currencyHistory(Model model) {
         model.addAttribute("userInput", new UserInput());
-        model.addAttribute("currencyList", currencyService.getCurrencyList());
+        model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "currencyHistory";
     }
 
@@ -43,23 +46,23 @@ public class CurrenciesController {
     }
 
     @GetMapping("/currencyRates")
-    public String currencyRates(Model model){
+    public String currencyRates(Model model) {
         model.addAttribute("userInput", userService.getUserInput());
         model.addAttribute("currencyRates", currencyService.getCurrencyRateHistory());
         return "currencyRates";
     }
 
     @GetMapping("currencyCalculator")
-    public String currencyCalculator(Model model){
+    public String currencyCalculator(Model model) {
         model.addAttribute("userInput", new UserInput());
-        model.addAttribute("result", userService.calculateCurrency());
+        model.addAttribute("result", calculatorService.calculateCurrency());
         model.addAttribute("userInputInformation", userService.getUserInput());
-        model.addAttribute("currencyList", currencyService.getCurrencyList());
+        model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "currencyCalculator";
     }
 
     @PostMapping("currencyCalculator")
-    public String currencyCalculatorInput(Model model, @ModelAttribute UserInput userInput){
+    public String currencyCalculatorInput(Model model, @ModelAttribute UserInput userInput) {
         log.info("Form submitted with data: " + userInput);
         userService.initForCalculator(userInput, currencyService.getLatestCurrencyRate(userInput.getCurrency()));
         return "redirect:currencyCalculator";

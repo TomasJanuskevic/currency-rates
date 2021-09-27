@@ -6,20 +6,21 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@ToString
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CcyAmt {
+public class currencyRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ccyAmtId;
+    private Long currencyRateId;
     @JacksonXmlProperty(localName = "Ccy")
-    private String ccy;
+    private String currencyCode;
     @JacksonXmlProperty(localName = "Amt")
-    private double amt;
+    private double rate;
+
+    private String currencyName;
 
     @JsonBackReference(value = "ccyAmt")
     @ManyToOne

@@ -21,10 +21,4 @@ public class UserService {
         this.userInput.setCurrencyValue(userInput.getCurrencyValue());
         this.userInput.setCurrencyRate(currencyRate);
     }
-
-    public double calculateCurrency() {
-
-        return Math.round(this.userInput.getCurrencyValue() * this.userInput.getCurrencyRate() * 100.0) / 100.0;
-    }
-
 }

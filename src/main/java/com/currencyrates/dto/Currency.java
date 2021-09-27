@@ -11,19 +11,19 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Currency_List")
-public class CcyNtry {
+public class Currency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long currencyId;
 
     @JacksonXmlProperty(localName = "Ccy")
-    private String ccy;
+    private String currencyCode;
 
     @JacksonXmlProperty(localName = "CcyNm")
-    private String ccyNm;
+    private String currencyName;
 
     @JacksonXmlProperty(localName = "CcyNbr")
-    private String ccyNbr;
+    private String currencyNumber;
 
     @JacksonXmlProperty(localName = "CcyMnrUnts")
     private String ccyMnrUnts;
