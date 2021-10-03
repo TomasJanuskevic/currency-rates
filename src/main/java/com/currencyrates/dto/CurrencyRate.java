@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class currencyRate {
+public class CurrencyRate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long currencyRateId;

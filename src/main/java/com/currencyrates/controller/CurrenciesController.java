@@ -1,6 +1,7 @@
 package com.currencyrates.controller;
 
 
+import com.currencyrates.exception.CurrencyNotFoundException;
 import com.currencyrates.dto.UserInput;
 import com.currencyrates.service.CalculatorService;
 import com.currencyrates.service.CurrencyService;
@@ -67,7 +68,7 @@ public class CurrenciesController {
     }
 
     @PostMapping("currencyCalculator")
-    public String currencyCalculatorInput(@Valid UserInput userInput, BindingResult result, Model model) {
+    public String currencyCalculatorInput(@Valid UserInput userInput, BindingResult result, Model model) throws CurrencyNotFoundException {
         log.info("Form submitted with data: " + userInput);
         userService.initForCalculator(userInput, currencyService.getLatestCurrencyRate(userInput.getCurrency()));
         if (result.hasErrors()) {

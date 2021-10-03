@@ -1,6 +1,7 @@
 package com.currencyrates.service;
 
-import com.currencyrates.dto.currencyRate;
+import com.currencyrates.exception.CurrencyNotFoundException;
+import com.currencyrates.dto.CurrencyRate;
 import com.currencyrates.dto.Currency;
 import com.currencyrates.dto.FxRate;
 import com.currencyrates.repository.CurrencyRateRepository;
@@ -54,14 +55,18 @@ public class CurrencyService {
         return fxRates;
     }
 
-    public double getLatestCurrencyRate(String currency) {
-        return currencyRateRepository.findByCurrencyCode(currency).getRate();
+    public double getLatestCurrencyRate(String currency) throws CurrencyNotFoundException {
+        CurrencyRate currencyRate = currencyRateRepository.findByCurrencyCode(currency);
+        if (currencyRate == null) {
+            throw new CurrencyNotFoundException("Currency with: " + currency + " code was not found");
+        }
+        return currencyRate.getRate();
     }
 
-    public List<currencyRate> getLatestCurrenciesRate() {
+    public List<CurrencyRate> getLatestCurrenciesRate() {
         List<Currency> currencyList = getCurrencyList();
-        List<currencyRate> currencyRatesList = currencyRateRepository.findAll();
-        List<currencyRate> filteredListWithFullNames = currencyRatesList.stream()
+        List<CurrencyRate> currencyRatesList = currencyRateRepository.findAll();
+        List<CurrencyRate> filteredListWithFullNames = currencyRatesList.stream()
                 .filter(c -> !c.getCurrencyCode().equals("EUR")).collect(Collectors.toList());
 
         filteredListWithFullNames.forEach(c -> c.setCurrencyName(
