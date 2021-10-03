@@ -26,7 +26,6 @@ public class CurrenciesController {
     @Autowired
     private CalculatorService calculatorService;
 
-
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
@@ -39,7 +38,6 @@ public class CurrenciesController {
         model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "currencyHistory";
     }
-
 
     @GetMapping("/currencyRates")
     public String currencyRates(Model model) {
@@ -76,6 +74,5 @@ public class CurrenciesController {
             return currencyCalculator(model, userInput, false);
         }
         return currencyCalculator(model, userInput, true);
-
     }
 }

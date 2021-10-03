@@ -58,8 +58,8 @@
                                 </select>
                             </div>
                             <div class="col-sm-3">
-                                <input type="text" class="form-control" id="currencyValue" placeholder="Eur"
-                                       name="currencyValue" th:field="*{currencyValue}">
+                                <input type="text"  class="form-control" id="currencyValue" placeholder="Eur"
+                                       name="currencyValue"  onkeypress="return onlyNumberInput(event)" th:field="*{currencyValue}" >
                                 <div class="alert alert-warning" th:if="${#fields.hasErrors('currencyValue')}" th:errors="*{currencyValue}"></div>
                             </div>
                             <div class="col-sm-3">
