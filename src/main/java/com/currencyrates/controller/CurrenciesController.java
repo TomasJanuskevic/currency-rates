@@ -9,9 +9,11 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 
 @Controller
@@ -32,18 +34,12 @@ public class CurrenciesController {
     }
 
     @GetMapping("/currencyHistory")
-    public String currencyHistory(Model model) {
-        model.addAttribute("userInput", new UserInput());
+    public String currencyHistory(UserInput userInput, Model model) {
+        model.addAttribute("userInput", userInput);
         model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "currencyHistory";
     }
 
-    @PostMapping("/currencyRates")
-    public String currencyHistoryInput(Model model, @ModelAttribute UserInput userInput) {
-        log.info("Form submitted with data: " + userInput);
-        userService.initForCurrencyHistory(userInput);
-        return "redirect:currencyRates";
-    }
 
     @GetMapping("/currencyRates")
     public String currencyRates(Model model) {
@@ -53,18 +49,33 @@ public class CurrenciesController {
     }
 
     @GetMapping("currencyCalculator")
-    public String currencyCalculator(Model model) {
-        model.addAttribute("userInput", new UserInput());
+    public String currencyCalculator(Model model, UserInput userInput, boolean showResult) {
+        model.addAttribute("showResult", showResult);
+        model.addAttribute("userInput", userInput);
         model.addAttribute("result", calculatorService.calculateCurrency());
         model.addAttribute("userInputInformation", userService.getUserInput());
         model.addAttribute("currencyList", currencyService.getLatestCurrenciesRate());
         return "currencyCalculator";
     }
 
+    @PostMapping("/currencyRates")
+    public String currencyHistoryInput(@Valid UserInput userInput, BindingResult result, Model model) {
+        log.info("Form submitted with data: " + userInput);
+        userService.initForCurrencyHistory(userInput);
+        if (result.hasErrors()) {
+            return currencyHistory(userInput, model);
+        }
+        return currencyRates(model);
+    }
+
     @PostMapping("currencyCalculator")
-    public String currencyCalculatorInput(Model model, @ModelAttribute UserInput userInput) {
+    public String currencyCalculatorInput(@Valid UserInput userInput, BindingResult result, Model model) {
         log.info("Form submitted with data: " + userInput);
         userService.initForCalculator(userInput, currencyService.getLatestCurrencyRate(userInput.getCurrency()));
-        return "redirect:currencyCalculator";
+        if (result.hasErrors()) {
+            return currencyCalculator(model, userInput, false);
+        }
+        return currencyCalculator(model, userInput, true);
+
     }
 }

@@ -9,9 +9,11 @@ public class CalculatorService {
     private UserService userService;
 
     public double calculateCurrency() {
-        double currencyValue = userService.getUserInput().getCurrencyValue();
         double currencyRate = userService.getUserInput().getCurrencyRate();
+        Integer currencyValue = userService.getUserInput().getCurrencyValue();
+        if (currencyValue == null) {
+            return 0;
+        }
         return Math.round(currencyValue * currencyRate * 100.0) / 100.0;
     }
-
 }

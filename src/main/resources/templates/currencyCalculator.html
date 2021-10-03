@@ -60,16 +60,19 @@
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" id="currencyValue" placeholder="Eur"
                                        name="currencyValue" th:field="*{currencyValue}">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('currencyValue')}" th:errors="*{currencyValue}"></div>
                             </div>
                             <div class="col-sm-3">
                                 <button type="submit" class="btn btn-primary">Calculate</button>
                             </div>
                         </div>
+                        <div th:if="${showResult}">
                         <div class="row">
                             <h4 th:text="${result} + ' Eur'"></h4>
                         </div>
                         <div class="row">
                             <h4 th:text="'Currency rate ' + ${userInputInformation.getCurrencyRate()}"></h4>
+                        </div>
                         </div>
                     </div>
                 </form>
