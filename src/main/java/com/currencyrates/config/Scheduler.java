@@ -13,8 +13,7 @@ public class Scheduler {
     @Autowired
     private CurrencyService currencyService;
 
-    //@Scheduled(cron = "0 0 0 * * ?")
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 0 0 * * ?")
     private void addCurrencyData() {
         currencyService.addCurrencyList();
         currencyService.addLatestCurrencyRates();

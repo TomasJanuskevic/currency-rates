@@ -12,6 +12,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -72,6 +73,7 @@ public class CurrencyService {
         return filteredListWithFullNames;
     }
 
+    @Transactional
     public void addCurrencyList() {
         try {
             ObjectMapper mapper = new XmlMapper();
@@ -79,12 +81,14 @@ public class CurrencyService {
             TypeReference<List<Currency>> typeReference = new TypeReference<>() {
             };
             List<Currency> ccyNtries = mapper.readValue(url, typeReference);
+            currencyRepository.truncateCurrencyList();
             currencyRepository.saveAll(ccyNtries);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    @Transactional
     public void addLatestCurrencyRates() {
         try {
             ObjectMapper mapper = new XmlMapper();
@@ -92,6 +96,7 @@ public class CurrencyService {
             TypeReference<List<FxRate>> typeReference = new TypeReference<>() {
             };
             List<FxRate> fxRates = mapper.readValue(url, typeReference);
+            fxRateRepository.truncateCurrencyRates();
             fxRateRepository.saveAll(fxRates);
         } catch (Exception e) {
             e.printStackTrace();
