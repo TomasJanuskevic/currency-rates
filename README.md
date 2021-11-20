@@ -10,7 +10,7 @@
 ### **Technology**
 
 * Java
-* H2 Database
+* PostgreSQL Database
 * SpringBoot
 * Hibernate
 * Thymeleaf
